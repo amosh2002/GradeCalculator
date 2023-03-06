@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">HW2</string>
+    <string name="app_shared_prefs">Shared Prefs</string>
+    <string name="first_time_opening">true</string>
+    <string name="final_grade_empty_text">Final grade will be displayed here</string>
+    <string name="added_homeworks_hint">Added homeworks:</string>
+    <string name="homeworks">homeworks</string>
+    <string name="participation">participation</string>
+    <string name="group_presentation">group_presentation</string>
+    <string name="midterm1">midterm1</string>
+    <string name="midterm2">midterm2</string>
+    <string name="final_project">final_project</string>
+    <string name="final_grade">final_grade</string>
 </resources>

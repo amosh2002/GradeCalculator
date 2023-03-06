@@ -1,6 +1,6 @@
 package com.example.hw2
 
-data class GradesModel(
+class GradesModel(
     private var homeworks: ArrayList<Int> = arrayListOf(100, 100, 100, 100, 100),
     private var participation: Int = 100,
     private var presentation: Int = 100,
@@ -8,6 +8,34 @@ data class GradesModel(
     private var midterm2: Int = 100,
     private var finalProject: Int = 100,
 ) {
+    fun getHomeworks(): String {
+        var string = ""
+        for (i in 0..3) {
+            string = string + homeworks.get(i) + ","
+        }
+        return string + homeworks.get(4)
+    }
+
+    fun getParticipation(): String {
+        return this.participation.toString()
+    }
+
+    fun getPresentation(): String {
+        return this.presentation.toString()
+    }
+
+    fun getMidterm1(): String {
+        return this.midterm1.toString()
+    }
+
+    fun getMidterm2(): String {
+        return this.midterm2.toString()
+    }
+
+    fun getFinalProject(): String {
+        return this.finalProject.toString()
+    }
+
     fun setHomeworks(homeworks: String) {
         if (homeworks.isEmpty()) {
             this.homeworks = arrayListOf(100, 100, 100, 100, 100)
@@ -74,6 +102,12 @@ data class GradesModel(
     }
 
     fun calculateFinalGrade(): String {
-        return (homeworks.average() * .2 + participation * .1 + presentation * .1 + midterm1 * .1 + midterm2 * .2 + finalProject * .3).toString()
+        val finalGrade =
+            (homeworks.average() * .2 + participation * .1 + presentation * .1 + midterm1 * .1 + midterm2 * .2 + finalProject * .3)
+        return if (finalGrade > 100)
+            "100"
+        else
+            finalGrade.toString()
     }
+
 }

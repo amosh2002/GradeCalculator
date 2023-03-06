@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity"
+    tools:context="com.example.hw2.MainActivity"
     tools:ignore="RtlHardcoded">
 
     <TextView
@@ -71,7 +71,7 @@
         android:layout_gravity="left|center"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:text="Added homeworks: "
+        android:text="Added homeworks:"
         android:textSize="15sp" />
 
     <LinearLayout

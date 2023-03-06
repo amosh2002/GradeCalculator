@@ -1,5 +1,7 @@
 package com.example.hw2
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -36,8 +38,44 @@ class MainActivity : AppCompatActivity() {
 
         addHWButton.isEnabled = false
 
+        val sharedPreferences: SharedPreferences = getSharedPreferences(
+            getString(R.string.app_shared_prefs),
+            Context.MODE_PRIVATE
+        )
+        sharedPreferences.let { sharedP ->
+            val isFirstTimeOpening =
+                sharedP.getBoolean(getString(R.string.first_time_opening), true)
+
+            if (isFirstTimeOpening) {
+                with(sharedP.edit()) {
+                    putBoolean(getString(R.string.first_time_opening), false)
+                    apply()
+                }
+            } else {
+                addedHomeworksTextView.text = getString(R.string.added_homeworks_hint) +
+                        sharedPreferences.getString(getString(R.string.homeworks), "")
+                participationInputField.setText(
+                    sharedPreferences.getString(getString(R.string.participation), "")
+                )
+                presentationInputField.setText(
+                    sharedPreferences.getString(getString(R.string.group_presentation), "")
+                )
+                midterm1InputField.setText(
+                    sharedPreferences.getString(getString(R.string.midterm1), "")
+                )
+                midterm2InputField.setText(
+                    sharedPreferences.getString(getString(R.string.midterm2), "")
+                )
+                finalProjectInputField.setText(
+                    sharedPreferences.getString(getString(R.string.final_project), "")
+                )
+                resultTextView.text =
+                    sharedPreferences.getString(getString(R.string.final_grade), "")
+            }
+        }
+
         calculateButton.setOnClickListener {
-            grades.setHomeworks(addedHomeworksTextView.text.toString().split(": ")[1])
+            grades.setHomeworks(addedHomeworksTextView.text.toString().split(":")[1])
             grades.setParticipation(participationInputField.text.toString())
             grades.setPresentation(presentationInputField.text.toString())
             grades.setMidterm1(midterm1InputField.text.toString())
@@ -45,6 +83,7 @@ class MainActivity : AppCompatActivity() {
             grades.setFinalProject(finalProjectInputField.text.toString())
 
             resultTextView.text = grades.calculateFinalGrade()
+            saveToPreferences(sharedPreferences)
         }
 
         homeworksInputField.addTextChangedListener(object : TextWatcher {
@@ -67,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                 addHWButton.isEnabled = false
                 flag = 1
             }
-            if (addedHomeworksTextView.text.toString().split(":")[1] != " ")
+            if (addedHomeworksTextView.text.toString().split(":")[1] != "")
                 addedHomeworksTextView.text = addedHomeworksTextView.text.toString() + ","
 
             addedHomeworksTextView.text =
@@ -77,19 +116,36 @@ class MainActivity : AppCompatActivity() {
         }
 
         resetHWsButton.setOnClickListener {
-            addedHomeworksTextView.text = "Added homeworks: "
+            addedHomeworksTextView.text = getString(R.string.added_homeworks_hint)
             homeworksInputField.setText("")
+            flag = 0
         }
 
         resetButton.setOnClickListener {
-            addedHomeworksTextView.text = "Added homeworks: "
+            addedHomeworksTextView.text = getString(R.string.added_homeworks_hint)
             homeworksInputField.setText("")
             participationInputField.setText("")
             presentationInputField.setText("")
             midterm1InputField.setText("")
             midterm2InputField.setText("")
             finalProjectInputField.setText("")
-            resultTextView.text = "Final grade will be displayed here"
+            resultTextView.text = getString(R.string.final_grade_empty_text)
         }
+    }
+
+    private fun saveToPreferences(sharedPreferences: SharedPreferences) {
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString(getString(R.string.homeworks), grades.getHomeworks())
+        editor.putString(getString(R.string.participation), grades.getParticipation())
+        editor.putString(
+            getString(R.string.group_presentation),
+            grades.getPresentation()
+        )
+        editor.putString(getString(R.string.midterm1), grades.getMidterm1())
+        editor.putString(getString(R.string.midterm2), grades.getMidterm2())
+        editor.putString(getString(R.string.final_project), grades.getFinalProject())
+        editor.putString(getString(R.string.final_grade), grades.calculateFinalGrade())
+        editor.apply()
+        editor.commit()
     }
 }
